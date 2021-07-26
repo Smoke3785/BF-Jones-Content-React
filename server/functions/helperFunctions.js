@@ -2,6 +2,8 @@ const fs = require("fs")
 const path = require("path")
 const colors = require('../config/chalk')
 let files  = [];
+const dirTree = require("directory-tree");
+const { magentaBright } = require("chalk");
 
 const getTime =()=> {
     let currentDate = new Date();
@@ -45,21 +47,21 @@ const getArchiveFiles =(dir)=> {
 }
 
 const getArchiveDirectory =(dir) => {
-    return fs.readdirSync(dir);
+    return new Promise((resolve, reject)=> {
+        const manifest = dirTree(dir);
+        resolve(manifest)
+    })
 }
 
 const generateManifest = async () => {
     return new Promise((resolve, reject)=> {
-        let collections = fs.readdirSync('./Collections')
-        let finalManifest = []
-        collections.forEach((data)=> {
-            let manifestFile = require(`../Collections/${data}/manifest.json`)
-            finalManifest.push(manifestFile)
-            if (finalManifest.length == collections.length) {
-                resolve(finalManifest)
-            }
-        })
+        const manifest = dirTree("./Collections");
+        resolve(manifest)
     })
+}
+
+const getHeaderImage = (path) => {
+    return fs.existsSync(`./${path}/featured.png`)? false : fs.readdirSync(`./${path}`)[0];
 }
 module.exports.generateManifest = generateManifest
 module.exports.rej = rej
@@ -67,3 +69,11 @@ module.exports.err = err
 module.exports.getTime = getTime
 module.exports.getArchiveFiles = getArchiveFiles
 module.exports.getArchiveDirectory = getArchiveDirectory
+module.exports.getHeaderImage = getHeaderImage
+
+
+// if (!fs.existsSync(`./../${req.params.path}/feature.png`)) {
+        
+//     let dir = fs.readdirSync(`./../${req.params.path}`)
+//     res.status(200).sendFile(path.resolve(__dirname + dir[0]))
+// }

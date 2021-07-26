@@ -18,21 +18,23 @@ const getArchiveFiles =(req, res, next)=> {
     res.status(200).sendFile(path.resolve(__dirname + `./../Collections/${req.params.path}`))
 
 }
-const getArchiveDirectory =(req, res, next)=> {
+const getArchiveDirectory = async (req, res, next)=> {
     if (!req.params.path) {
         helperFunctions.rej('No path specified')
         res.status(400).json({msg: 'No path specified'})
         return
     }
-    res.status(200).json({msg: helperFunctions.getArchiveDirectory(`./Collections/${req.params.path}`)})
+    res.status(200).json(await helperFunctions.getArchiveDirectory(`./${req.params.path}`))
 }
 const getCollectionManifest = async (req, res, next) => {
-    
     res.status(200).json(await helperFunctions.generateManifest())
 }
-
+const getDirImage = async (req, res, next) => {
+    res.status(200).sendFile(path.resolve(__dirname + `./../${req.params.path}/${helperFunctions.getHeaderImage(req.params.path) || 'feature.png'}`))
+}
 
 module.exports.apiTest = apiTest
 module.exports.getArchiveFiles = getArchiveFiles
 module.exports.getArchiveDirectory = getArchiveDirectory
 module.exports.getCollectionManifest = getCollectionManifest
+module.exports.getDirImage = getDirImage

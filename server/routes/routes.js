@@ -7,6 +7,7 @@ router.get('/apiTest', controllers.apiTest);
 router.get('/getArchiveFiles/:path?', controllers.getArchiveFiles)
 router.get('/getArchiveDirectory/:path?', controllers.getArchiveDirectory)
 router.get('/getManifest', controllers.getCollectionManifest)
+router.get('/getDirImage/:path?', controllers.getDirImage)
 module.exports = router;
 
 
