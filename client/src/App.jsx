@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import DirectoryViewer from './Components/DirectoryViewer'
+import FileCard from './Components/FileCard'
 import { useParams } from "react-router-dom";
 
 import DirectoryCard from './Components/DirectoryCard'
@@ -24,8 +25,9 @@ const keysrt =(key)=> {
 const CollectionViewer =()=>{
   const {collectionRoute} = useParams()
   const [collection, setCollection] = useState()
-
+  const [limitPage, setLimitPage] = useState(1)
   useEffect(()=> {
+    setLimitPage(1)
     axios.get(`${serverLoc}/getArchiveDirectory/${cleanString(collectionRoute)}`).then(res => {
       setCollection(res.data)
     })
@@ -36,27 +38,27 @@ const CollectionViewer =()=>{
       setCollection(res.data)
     })
   },[collectionRoute])
-
   return (
     <div className="mainDiv">
-          <h4>Collection viewer!</h4>
+          {/* <h4>Collection viewer!</h4> */}
           {!collection? <p>Loading...</p> : 
      <div className="collectionDiv">
-       {collection.children.sort(keysrt('type')).map((data)=> {
+       {collection.children.sort(keysrt('type')).slice(0, limitPage * 10).map((data)=> {
          return (
           <div>
             {data.type == 'directory'? 
               <DirectoryCard collectionRoute={collectionRoute} data={data}/>
               :
-              <div className="fileCont">
-                <h5>{data.name}</h5>
-                <div className="bannerimg" style={{ backgroundImage: `url(${data.imageLink})`}}></div>
-                <p className="test">{data.uploadDate}</p>
-              </div>
+              <FileCard data={data}/>
           }
           </div>
          )
        })}
+       <div className="loadMoreBtn" style={limitPage * 10 >= collection?.children?.length? {display: 'none'} : {}}onClick={()=> {
+            setLimitPage(prev => prev + 1)
+          }}>
+          <h6>Load More</h6>
+       </div>
      </div>
     }
     </div>
@@ -111,11 +113,7 @@ const RootViewer =()=> {
               </div>
               </Link>
               :
-              <div className="fileCont">
-                <h5>{data.name}</h5>
-                <div className="bannerimg" style={{ backgroundImage: `url(${data.imageLink})`}}></div>
-                <p className="test">{data.uploadDate}</p>
-              </div>
+            <FileCard />
           }
           </div>
          )

@@ -45,6 +45,9 @@
   height: 100vh;
   margin: 0;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -60,12 +63,31 @@
   height: 400px;
   background-color: rgba(0, 0, 0, 0.1);
   margin: 20px;
-  border-radius: 1em;
+  border-radius: 0.3em;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .fileCont {
   width: 300px;
   height: 400px;
   background-color: rgba(0, 0, 0, 0.3);
   margin: 20px;
-  border-radius: 1em;
+  border-radius: 0.3em;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.loadMoreBtn {
+  width: 1000px;
+  height: 30px;
+  background-color: saddlebrown;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.loadMoreBtn > h6 {
+  margin: 0 !important;
 }

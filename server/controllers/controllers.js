@@ -32,9 +32,12 @@ const getCollectionManifest = async (req, res, next) => {
 const getDirImage = async (req, res, next) => {
     res.status(200).sendFile(path.resolve(__dirname + `./../${req.params.path}/${helperFunctions.getHeaderImage(req.params.path) || 'feature.png'}`))
 }
-
+const getImageFile = async (req, res, next) => {
+    res.status(200).sendFile(path.resolve(__dirname + `./../${req.params.path}`))
+}
 module.exports.apiTest = apiTest
 module.exports.getArchiveFiles = getArchiveFiles
 module.exports.getArchiveDirectory = getArchiveDirectory
 module.exports.getCollectionManifest = getCollectionManifest
 module.exports.getDirImage = getDirImage
+module.exports.getImageFile = getImageFile
