@@ -6,10 +6,9 @@ import { useEffect, useState, useRef, useHook } from 'react'
 import DirectoryViewer from './Components/DirectoryViewer'
 import FileCard from './Components/FileCard'
 import { useParams } from "react-router-dom";
-
 import DirectoryCard from './Components/DirectoryCard'
-let serverLoc = `http://localhost:5000/api/v1`
-
+let serverLoc = process.env.REACT_APP_SERVER
+// 23572
 const cleanString =(str)=> {
   let clean1 = str.replaceAll('/', '%2F')
   let clean2 = clean1.replaceAll('\\','%2F')
@@ -38,11 +37,12 @@ const CollectionViewer =()=>{
   //   }
   // },[])
   useEffect(() => {
-    if (onScreen) {
-      setLimitPage(prev => prev + 1)
-      console.log(onScreen)
+    window.onscroll =()=> {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        setLimitPage(prev => prev + 1)
+      }
     }
-  }, [onScreen])
+  }, [])
   useEffect(()=> {
     setLimitPage(1)
     axios.get(`${serverLoc}/getArchiveDirectory/${cleanString(collectionRoute)}`).then(res => {
@@ -73,11 +73,11 @@ const CollectionViewer =()=>{
          )
        })}
 
-       <div ref={frameRef} className="loadMoreBtn" style={limitPage * 10 >= collection?.children?.length? {display: 'none'} : {}}onClick={()=> {
+       {/* <div ref={frameRef} className="loadMoreBtn" style={limitPage * 10 >= collection?.children?.length? {display: 'none'} : {}}onClick={()=> {
             setLimitPage(prev => prev + 1)
           }}>
           <h6>Load More</h6>
-       </div>
+       </div> */}
      </div>
     }
     </div>
