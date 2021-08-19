@@ -1,4 +1,4 @@
-console.clear()
+// console.clear()
 // Import dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
