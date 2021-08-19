@@ -33,6 +33,10 @@ const getDirImage = async (req, res, next) => {
     res.status(200).sendFile(path.resolve(__dirname + `./../${req.params.path}/${helperFunctions.getHeaderImage(req.params.path) || 'feature.png'}`))
 }
 const getImageFile = async (req, res, next) => {
+    // Check for file name in 
+    res.status(200).sendFile(path.resolve(__dirname + `./../${req.params.path}`))
+}
+const getFullImageFile = async (req, res, next)=> {
     res.status(200).sendFile(path.resolve(__dirname + `./../${req.params.path}`))
 }
 module.exports.apiTest = apiTest

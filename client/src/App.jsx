@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useHook } from 'react'
 import DirectoryViewer from './Components/DirectoryViewer'
 import FileCard from './Components/FileCard'
 import { useParams } from "react-router-dom";
@@ -24,8 +24,25 @@ const keysrt =(key)=> {
 }
 const CollectionViewer =()=>{
   const {collectionRoute} = useParams()
+  const frameRef = useRef()
   const [collection, setCollection] = useState()
   const [limitPage, setLimitPage] = useState(1)
+  const onScreen = useOnScreen(frameRef, '0px');
+  // useEffect(()=> {
+  //   if (!typeof window) return
+  //   window.onscroll =()=> {
+  //     if (onScreen) {
+  //       setLimitPage(prev => prev + 1)
+  //       console.log(onScreen)
+  //     }
+  //   }
+  // },[])
+  useEffect(() => {
+    if (onScreen) {
+      setLimitPage(prev => prev + 1)
+      console.log(onScreen)
+    }
+  }, [onScreen])
   useEffect(()=> {
     setLimitPage(1)
     axios.get(`${serverLoc}/getArchiveDirectory/${cleanString(collectionRoute)}`).then(res => {
@@ -38,23 +55,25 @@ const CollectionViewer =()=>{
       setCollection(res.data)
     })
   },[collectionRoute])
+
   return (
     <div className="mainDiv">
           {/* <h4>Collection viewer!</h4> */}
           {!collection? <p>Loading...</p> : 
      <div className="collectionDiv">
-       {collection.children.sort(keysrt('type')).slice(0, limitPage * 10).map((data)=> {
+       {collection.children.sort(keysrt('type')).slice(0, limitPage * 10).map((data, idx)=> {
          return (
-          <div>
+          <>
             {data.type == 'directory'? 
-              <DirectoryCard collectionRoute={collectionRoute} data={data}/>
+              <DirectoryCard idx={idx} collectionRoute={collectionRoute} data={data}/>
               :
               <FileCard data={data}/>
           }
-          </div>
+          </>
          )
        })}
-       <div className="loadMoreBtn" style={limitPage * 10 >= collection?.children?.length? {display: 'none'} : {}}onClick={()=> {
+
+       <div ref={frameRef} className="loadMoreBtn" style={limitPage * 10 >= collection?.children?.length? {display: 'none'} : {}}onClick={()=> {
             setLimitPage(prev => prev + 1)
           }}>
           <h6>Load More</h6>
@@ -63,9 +82,25 @@ const CollectionViewer =()=>{
     }
     </div>
   )
-
 }
-
+const useOnScreen =(ref, rootMargin = "-0px") => {
+  const [isIntersecting, setIsIntersecting] = useState(false)
+  useEffect(()=>{
+      const observer = new IntersectionObserver(
+          ([entry]) => {
+              setIsIntersecting(entry.isIntersecting)
+          },
+          {rootMargin}
+      );
+      if (ref.current) {
+          observer.observe(ref.current)
+      }
+      return ()=> {
+          if (ref.current) observer.unobserve(ref.current)
+      }
+  },[])
+  return isIntersecting;
+}
 const ItemViewer =()=>{
   const { collectionId } = useParams();
   const [collection, setCollection] = useState()
@@ -87,6 +122,7 @@ const ItemViewer =()=>{
 }
 
 const RootViewer =()=> {
+  const collectionRoute = useParams;
   const [collection, setCollection] = useState()
 
   useEffect(() => {
@@ -129,7 +165,7 @@ const App =()=> {
   return (
     <div className="App">
       <h1>BF Jones Memorial Library Archive web portal</h1>
-      <Route exact path="/Collections/" component={RootViewer}></Route>
+      {/* <Route exact path="/Collections/" component={RootViewer}></Route> */}
       <Route path="/:collectionRoute" component={CollectionViewer} />
       <Route path="/items/:collectionID" component={ItemViewer}></Route>
     </div>
@@ -137,3 +173,6 @@ const App =()=> {
 }
 
 export default App;
+
+
+

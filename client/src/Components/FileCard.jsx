@@ -23,12 +23,14 @@ const FileCard =({...props})=> {
     }, [])
 
 return (
-    <div className="fileCont" style={{ 
-        backgroundImage: `url(${serverLoc}/getImageFile/${cleanString(data?.path)})`
-        }}>
-        <h5>{data?.name}</h5>
-        <div className="bannerimg"></div>
-        <p className="test">{data?.uploadDate}</p>
+  <div className="card fileCard" style={{ 
+    backgroundImage: `url(${serverLoc}/getImageFile/${cleanString(data?.path)})`
+    }}>
+    <div>
+      <div><p>{data?.children?.length}</p></div>
+
+    </div>
+    <div><h3>{data?.name}</h3></div>
   </div>
 )
 }

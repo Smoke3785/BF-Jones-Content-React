@@ -11,17 +11,17 @@ const cleanString =(str)=> {
 const DirectoryCard =({...props})=> {
     let data = props.data
     let collectionRoute = props.collectionRoute
-    return ( 
-        <div className="directoryCard">
-            <Link to={`/${cleanString(data.path)}`}>
-                <div style={{
-                    backgroundImage: `url(${serverLoc}/getDirImage/${cleanString(data.path)})`
-                }} className="collectionCont">
-                    <h5>{data.name}</h5>
-                    <h6>{data.children.length}</h6>
-                </div>
-            </Link>
+    return (
+        <Link className="link-bf" to={`/${cleanString(data.path)}`}>
+        <div style={{backgroundImage: `url(${serverLoc}/getDirImage/${cleanString(data.path)})`}} className="card">
+        <div>
+            <div><p>{data?.children?.length}</p></div>
+
+            </div>
+            <div><h3>{data?.name}</h3></div>
+
         </div>
+        </Link>
     )
 }
 export default DirectoryCard;

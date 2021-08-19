@@ -62,4 +62,31 @@ app.listen(port, () => console.log(colors.serverInit(`Server running on port ${p
 
 
 
+
 // module.exports.archiveFiles = helperFunctions.getArchiveFiles('./Yearbooks')
+
+
+
+// This is where I put code that I'm using to help folks on Reactiflux
+
+// const isEven =n=> Number.isInteger(n/2);
+// console.log(isEven(121))
+
+
+// let output = {
+//     44: 'Older',
+//     45: 'Society',
+//     1001: 'Government/Balance sheets',
+//     1002: 'Government/Employment and remuneration',
+//     1000000: 'example'
+//   }
+//   let x = Object.fromEntries(Object.entries(output).filter((data)=> data[0].length <= 2))
+//   console.log(x)
+
+//   fetch(url)
+//   .then(res => Promise.all([res.json()]))
+//   .then((jsonData) => {
+//     console.log(Object.fromEntries(Object.fromEntries(Object.entries(jsonData.subjects).filter(([key]) => key.length <= 2)))
+//     );
+
+//   });
