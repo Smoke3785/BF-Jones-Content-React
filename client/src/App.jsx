@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState, useRef, useHook } from 'react'
 import DirectoryViewer from './Components/DirectoryViewer'
@@ -165,7 +165,7 @@ const App =()=> {
   return (
     <div className="App">
       <h1>BF Jones Memorial Library Archive web portal</h1>
-      {/* <Route exact path="/Collections/" component={RootViewer}></Route> */}
+      <Route exact path="/" render={()=> <Redirect to="/collections%2FYearbooks"/>}/>
       <Route path="/:collectionRoute" component={CollectionViewer} />
       <Route path="/items/:collectionID" component={ItemViewer}></Route>
     </div>
